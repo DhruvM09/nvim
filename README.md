@@ -1,5 +1,5 @@
 # My neovim config using kickstart.nvim
-Details:
+Details:     
 Plugin Manager:Lazy Nvim   
 Operating System:Windows   
 Terminal Font:FiraCode Nerd Font   
