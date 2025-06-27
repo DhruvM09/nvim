@@ -228,7 +228,7 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 vim.keymap.set('i', 'jk', [[<C-\><C-n>]])
-
+vim.keymap.set('n','<leader>tt',':botright 10sp term://powershell<CR>i')
 -- Open compiler
 --vim.api.nvim_set_keymap('n', '<F6>', '<cmd>CompilerOpen<cr>', { noremap = true, silent = true })
 --coderunner
@@ -250,7 +250,6 @@ vim.api.nvim_set_keymap(
     .. '<cmd>CompilerRedo<cr>',
   { noremap = true, silent = true }
 )
-
 -- Toggle compiler results
 vim.api.nvim_set_keymap('n', '<S-F7>', '<cmd>CompilerToggleResults<cr>', { noremap = true, silent = true })
 
@@ -947,7 +946,7 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        documentation = { auto_show = true, auto_show_delay_ms = 500 },
       },
 
       sources = {

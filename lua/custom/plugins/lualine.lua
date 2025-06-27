@@ -52,7 +52,7 @@ return {
         lualine_b = {
           {
             'filetype',
-            icon_only = true,
+            icon_only = false,
             padding = { left = 1, right = 0 },
           },
           'filename',
