@@ -25,7 +25,7 @@ return {
           '#define ll long long int',
           '#define loop(i,start,stop,inc) for(int i = start;i<stop;i+=inc)',
           '#define readVec(x) for(int i = 0 ; i < x.size();i++)cin >> x[i];',
-          '#define debug(x) cerr << #x << ": " << (x) << "endl";',
+          '#define debug(x) cerr << #x << ": " << (x) << "\n";',
           "#define debugvec(x) for(int i = 0 ; i  <x.size();i++)cerr<< x[i] << ' ';",
           '#define pb push_back',
           '#define ppb pop_back',

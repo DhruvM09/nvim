@@ -118,7 +118,9 @@ end)
 
 -- Enable break indent
 vim.o.breakindent = true
-
+--tab settings
+vim.o.tabstop = 2
+vim.o.shiftwidth = 0
 -- Save undo history
 vim.o.undofile = true
 
@@ -148,7 +150,7 @@ vim.o.splitbelow = true
 --   See `:help lua-options`
 --   and `:help lua-options-guide`
 vim.o.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '   ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
@@ -223,12 +225,16 @@ api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
+--visual mode moveing lines
+vim.keymap.set('n', '<A-j>', ':m .+1<CR>==') -- move line up(n)
+vim.keymap.set('n', '<A-k>', ':m .-2<CR>==') -- move line down(n)
+vim.keymap.set('v', '<A-j>', ":m '>+1<CR>gv=gv") -- move line up(v)
+vim.keymap.set('v', '<A-k>', ":m '<-2<CR>gv=gv") -- move line down(v)
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 vim.keymap.set('i', 'jk', [[<C-\><C-n>]])
-vim.keymap.set('n','<leader>tt',':botright 10sp term://powershell<CR>i')
+vim.keymap.set('n', '<leader>tt', ':botright 20sp term://powershell<CR>i')
 -- Open compiler
 --vim.api.nvim_set_keymap('n', '<F6>', '<cmd>CompilerOpen<cr>', { noremap = true, silent = true })
 --coderunner
@@ -1106,14 +1112,14 @@ require('lazy').setup({
     },
   },
 })
---transparent background
-vim.cmd [[
-augroup TransparentBackground
-autocmd!
-autocmd ColorScheme * highlight Normal ctermbg=none guibg=none
-autocmd ColorScheme * highlight NonText ctermbg=none guibg=none
-augroup END
-]]
+-- --transparent background
+-- vim.cmd [[
+-- augroup TransparentBackground
+-- autocmd!
+-- autocmd ColorScheme * highlight Normal ctermbg=none guibg=none
+-- autocmd ColorScheme * highlight NonText ctermbg=none guibg=none
+-- augroup END
+-- ]]
 vim.cmd 'colorscheme gruvbox'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
