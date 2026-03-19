@@ -123,7 +123,7 @@ vim.o.tabstop = 2
 vim.o.shiftwidth = 0
 -- Save undo history
 vim.o.undofile = true
-
+vim.opt.fillchars = 'eob: '
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -528,7 +528,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>/', function()
         -- You can pass additional configuration to Telescope to change the theme, layout, etc.
         builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
+          winblend = 5,
           previewer = false,
         })
       end, { desc = '[/] Fuzzily search in current buffer' })
@@ -749,8 +749,6 @@ require('lazy').setup({
             local diagnostic_message = {
               [vim.diagnostic.severity.ERROR] = diagnostic.message,
               [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
             }
             return diagnostic_message[diagnostic.severity]
           end,
@@ -775,13 +773,26 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {
+          capabilities = {
+            offsetEncoding = { 'utf-16' },
+          },
           cmd = {
             'clangd',
             '--query-driver=C:/msys64/ucrt64/bin/gcc.exe,C:/msys64/ucrt64/bin/g++.exe',
           },
         },
         -- gopls = {},
-        pyright = {},
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                diagnosticMode = 'workspace', -- Changed from openFilesOnly
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
 
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -939,6 +950,7 @@ require('lazy').setup({
         -- All presets have the following mappings:
         -- <tab>/<s-tab>: move to right/left of your snippet expansion
         -- <c-space>: Open menu or open docs if already open
+        --
         -- <c-n>/<c-p> or <up>/<down>: Select next/previous item
         -- <c-e>: Hide menu
         -- <c-k>: Toggle signature help
@@ -1119,6 +1131,7 @@ require('lazy').setup({
     },
   },
 })
+-- coderunner setup 
 -- --transparent background
 -- vim.cmd [[
 -- augroup TransparentBackground
