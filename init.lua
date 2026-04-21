@@ -62,7 +62,6 @@ vim.o.timeoutlen      = 300
 vim.opt.synmaxcol     = 300 -- Syntax highlighting limit
 vim.opt.redrawtime    = 10000
 vim.opt.maxmempattern = 20000
-vim.opt.autocomplete  = false
 
 -- Configure how new splits should be opened
 vim.o.splitright      = true
