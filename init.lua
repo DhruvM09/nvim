@@ -1,3 +1,6 @@
+if vim.loader then
+  vim.loader.enable()
+end
 vim.opt.termguicolors = true
 vim.cmd.colorscheme("retrobox")
 local function set_transparent() -- set UI component to transparent
@@ -21,6 +24,7 @@ local function set_transparent() -- set UI component to transparent
 end
 
 set_transparent()
+vim.env.LANG = "en_US.UTF-8"
 -- keymaps and leader
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -37,7 +41,7 @@ vim.opt.cursorlineopt = 'number'
 -- 3. Optional: Customize the appearance of the current line number
 -- Make it bold or change its color to stand out
 vim.api.nvim_set_hl(0, 'CursorLineNr', { bold = true, fg = '#f2b83a' })
-vim.opt.wrap = false
+vim.opt.wrap = true
 vim.opt.scrolloff = 10
 vim.opt.tabstop = 4 --tab width
 vim.o.showmode = false

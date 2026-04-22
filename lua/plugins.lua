@@ -1,9 +1,16 @@
--- gisigns
+-- gitsigns
 vim.pack.add({
     { src = "https://github.com/lewis6991/gitsigns.nvim" },
 })
-
-require('gitsigns').setup({ signcolumn = false })
+-- lazy loading gitsigns
+vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
+    group = vim.api.nvim_create_augroup("LazyGitsigns", { clear = true }),
+    callback = function()
+        require('gitsigns').setup({ signcolumn = false })
+        -- Delete autocmd after first run to save resources
+        vim.api.nvim_del_augroup_by_name("LazyGitsigns")
+    end
+})
 
 -- mini.nvim
 vim.pack.add({
@@ -140,7 +147,10 @@ require('blink.cmp').setup({
     signature = { enabled = true },
     keymap = {
         preset = "none",
-		 ['<C-h>'] = { 'show', 'show_documentation', 'hide_documentation' }, 
+		 ['<C-k>'] = { 'show', 'show_documentation', 'hide_documentation' }, 
+		 ['<C-s>'] = { 'show', 'show_signature', 'show_signature' }, 
+		 ['<C-space>'] = { "hide","show" }, 
+
 		["<C-n>"] = { "select_next", "fallback" },
 		["<C-p>"] = { "select_prev", "fallback" },
 
@@ -187,13 +197,10 @@ vim.lsp.config["*"] ={
 vim.pack.add({
     { src = "https://github.com/folke/which-key.nvim" },
 })
-local wk = require("which-key")
-wk.setup({
-    -- Your setup can be empty for defaults, or customized
-    preset = "classic", -- classic, modern, or helix
-    delay = 300, -- delay in ms before the popup appears
-})
-wk.add({
-    { "<leader>b", group = "󰓩 Buffers" },
-})
+vim.pack.add({ { src = "https://github.com/folke/which-key.nvim" } })
 
+vim.defer_fn(function()
+    local wk = require("which-key")
+    wk.setup({ preset = "classic", delay = 300 })
+    wk.add({ { "<leader>b", group = "󰓩 Buffers" } })
+end, 20)
