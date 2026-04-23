@@ -3,7 +3,7 @@
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
-      "version": "1.0.0 - 2.0.0"
+      "version": "'^1'"
     },
     "fzf-lua": {
       "rev": "beaa4e83e6be4174af291a464e4f49548c943963",
@@ -20,6 +20,10 @@
     "mini.nvim": {
       "rev": "5849ef04c32a6a8e55957b946c0a275801d87530",
       "src": "https://www.github.com/echasnovski/mini.nvim"
+    },
+    "nvim-lspconfig": {
+      "rev": "e146efacbafed3789ac568abcc5a981c5decaa58",
+      "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-tree.lua": {
       "rev": "d277467fc0d1d0e2bca88165a1de6b526f9f6fe8",

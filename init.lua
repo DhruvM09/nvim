@@ -100,6 +100,10 @@ vim.opt.wildmenu = true
 require("autocmds")
 require("statusline")
 require("plugins")
+
+vim.lsp.config["*"] = {
+		capabilities = require("blink.cmp").get_lsp_capabilities(),
+	}
 require("lsp")
 
 
