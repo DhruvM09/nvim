@@ -100,7 +100,7 @@ vim.keymap.set("n", "<leader>fX", function()
 		fzf_lua.diagnostic_workspace()
 end, { desc = "FZF Diagnostics Workspace" })
 vim.keymap.set('n', '<leader>fro', function()
-		fzf_lua.old_files()
+		fzf_lua.oldfiles()
 end, { desc = 'Recent Files' })
 
 -- nvim tree
