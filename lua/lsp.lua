@@ -1,4 +1,5 @@
 -- ~/.config/nvim-new/lua/lsp.lua
+local augroup = vim.api.nvim_create_augroup("UserLspConfig", { clear = true })
 vim.lsp.enable({
 	"lua_ls",
 	"clangd",
@@ -15,7 +16,6 @@ local diagnostic_signs = {
 
 
 vim.diagnostic.config({
-	-- 1. Show virtual text for Warnings and Errors
 	virtual_text = {
 		prefix = "●",
 		spacing = 4,
@@ -46,7 +46,6 @@ vim.diagnostic.config({
 		prefix = "",
 		focusable = false,
 		style = "minimal",
-		-- Shows Warnings and Errors in the floating window
 		severity = { min = vim.diagnostic.severity.WARN }
 	},
 })
@@ -68,11 +67,7 @@ local function lsp_on_attach(ev)
 	local bufnr = ev.buf
 	local opts = { noremap = true, silent = true, buffer = bufnr }
 
-	vim.keymap.set("n", "<leader>gd", function()
-		require("fzf-lua").lsp_definitions({ jump1 = true })
-	end, { desc = "fzf go to definition" })
-
-	vim.keymap.set("n", "<leader>gD", vim.lsp.buf.definition, { desc = "go to Definition" })
+	vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, { desc = "go to Definition" })
 
 	vim.keymap.set("n", "<leader>gS", function()
 		vim.cmd("vsplit")
@@ -88,9 +83,7 @@ local function lsp_on_attach(ev)
 		vim.diagnostic.open_float({ scope = "line" })
 	end, { desc = "open diagnostic" })
 
-	vim.keymap.set("n", "<leader>d", function()
-		vim.diagnostic.open_float({ scope = "cursor" })
-	end, opts)
+	-- vim.keymap.set("n", "<leader>d", function() vim.diagnostic.open_float({ scope = "cursor" }) end, opts)
 	vim.keymap.set("n", "<leader>nd", function()
 		vim.diagnostic.jump({ count = 1 })
 	end, opts)
@@ -106,7 +99,7 @@ local function lsp_on_attach(ev)
 	vim.keymap.set("n", "<leader>fd", function()
 		require("fzf-lua").lsp_definitions({ jump1 = true })
 	end, { desc = "fzf definitions" })
-	vim.keymap.set("n", "<leader>fr", function()
+	vim.keymap.set("n", "<leader>frr", function()
 		require("fzf-lua").lsp_references()
 	end, { desc = "fzf references" })
 	vim.keymap.set("n", "<leader>ft", function()
@@ -122,7 +115,7 @@ local function lsp_on_attach(ev)
 		require("fzf-lua").lsp_implementations()
 	end, { desc = "lsp_implementations" })
 
-if client:supports_method("textDocument/codeAction", bufnr) then
+	if client:supports_method("textDocument/codeAction", bufnr) then
 		vim.keymap.set("n", "<leader>oi", function()
 			vim.lsp.buf.code_action({
 				context = { only = { "source.organizeImports" }, diagnostics = {} },

@@ -50,62 +50,57 @@ require('mini.pairs').setup({
 })
 --fzf
 
-local function fzf(fn)
-	return function()
-		local actions = require('fzf-lua.actions')
-		local fzf_lua = require('fzf-lua')
-		fzf_lua.setup({
-			winopts = { backdrop = 85 },
-			keymap = {
-				builtin = {
+local actions = require('fzf-lua.actions')
+local fzf_lua = require('fzf-lua')
+fzf_lua.setup({
+	winopts = { backdrop = 85 },
+	keymap = {
+		builtin = {
 
-					["<C-f>"] = "preview-page-down",
-					["<C-b>"] = "preview-page-up",
-					["<C-r>"] = "toggle-preview",
-				},
-				fzf = {
-					["ctrl-a"] = "toggle-all",
-					["ctrl-t"] = "first",
-					["ctrl-g"] = "last",
-					["ctrl-d"] = "half-page-down",
-					["ctrl-u"] = "half-page-up",
-				}
-			},
-			actions = {
-				files = {
-					["ctrl-q"] = actions.file_sel_to_qf,
-					["ctrl-i"] = actions.toggle_ignore,
-					["ctrl-h"] = actions.toggle_hidden,
-					["enter"]  = actions.file_edit_or_qf,
-				}
-			}
-		})
-		fzf_lua[fn]()
-	end
-end
+			["<C-f>"] = "preview-page-down",
+			["<C-b>"] = "preview-page-up",
+			["<C-r>"] = "toggle-preview",
+		},
+		fzf = {
+			["ctrl-a"] = "toggle-all",
+			["ctrl-t"] = "first",
+			["ctrl-g"] = "last",
+			["ctrl-d"] = "half-page-down",
+			["ctrl-u"] = "half-page-up",
+		}
+	},
+	actions = {
+		files = {
+			["ctrl-q"] = actions.file_sel_to_qf,
+			["ctrl-i"] = actions.toggle_ignore,
+			["ctrl-h"] = actions.toggle_hidden,
+			["enter"]  = actions.file_edit_or_qf,
+		}
+	}
+})
 
 
 -- fzf keymaps
 vim.keymap.set("n", "<leader>ff", function()
-	fzf("files")
+	fzf_lua.files()
 end, { desc = "FZF Files" })
 vim.keymap.set("n", "<leader>fg", function()
-	fzf("live_grep")
+		fzf_lua.live_grep()
 end, { desc = "FZF Live Grep" })
 vim.keymap.set("n", "<leader>fb", function()
-	fzf("buffers")
+		fzf_lua.buffers()
 end, { desc = "FZF Buffers" })
 vim.keymap.set("n", "<leader>fh", function()
-	fzf("help_tags")
+		fzf_lua.help_tags()
 end, { desc = "FZF Help Tags" })
 vim.keymap.set("n", "<leader>fx", function()
-	fzf("diagnostics_document")
+		fzf_lua.diagnostics_document()
 end, { desc = "FZF Diagnostics Document" })
 vim.keymap.set("n", "<leader>fX", function()
-	fzf("diagnostics_workspace")
+		fzf_lua.diagnostic_workspace()
 end, { desc = "FZF Diagnostics Workspace" })
 vim.keymap.set('n', '<leader>fro', function()
-	fzf("oldfiles")
+		fzf_lua.old_files()
 end, { desc = 'Recent Files' })
 
 -- nvim tree
@@ -124,7 +119,7 @@ require("nvim-tree").setup({
 	sync_root_with_cwd = true,
 	respect_buf_cwd = true,
 })
-vim.keymap.set("n", "<leader>n", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle tree" })  
+vim.keymap.set("n", "<leader>n", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle tree" })
 -- blink cmp
 require('blink.cmp').setup({
 	fuzzy = { implementation = 'prefer_rust_with_warning' },
@@ -180,7 +175,5 @@ vim.defer_fn(function()
 	require("mason").setup({})
 
 
-	vim.lsp.config["*"] = {
-		capabilities = require("blink.cmp").get_lsp_capabilities(),
-	}
+	
 end, 80)
