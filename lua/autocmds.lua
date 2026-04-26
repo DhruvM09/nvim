@@ -10,3 +10,11 @@ autocmd('TextYankPost', {
     end,
     group = highlight_group,
 })
+-- This will highlight brackets in EVERY filetype
+vim.api.nvim_set_hl(0, "GlobalOrangeBrackets", { fg = "#fe8019" })
+
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        vim.fn.matchadd("GlobalOrangeBrackets", "[(){}\\[\\]]")
+    end,
+})

@@ -9,6 +9,8 @@ vim.pack.add({
 	{ src = "https://github.com/saghen/blink.cmp",         version = "^1" },
 	{ src = "https://github.com/folke/which-key.nvim" },
 })
+
+
 -- gitsigns
 -- lazy loading gitsigns
 vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
@@ -20,34 +22,37 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
 	end
 })
 
+-- mini lazy
+vim.schedule(function()
+	require("mini.ai").setup({})
+	require("mini.comment").setup({})
+	require("mini.move").setup({})
+	require("mini.surround").setup({})
+	require("mini.icons").setup({})
+	require("mini.icons").mock_nvim_web_devicons()
+	require("mini.tabline").setup({
+		show_icons = true, -- This will use your mini.icons/devicons mock
+		set_vim_settings = true, -- Ensures 'showtabline' is set to 2 (always show)
+	})
 
-require("mini.ai").setup({})
-require("mini.comment").setup({})
-require("mini.move").setup({})
-require("mini.surround").setup({})
-require("mini.icons").setup({})
-require("mini.icons").mock_nvim_web_devicons()
-require("mini.tabline").setup({
-	show_icons = true, -- This will use your mini.icons/devicons mock
-	set_vim_settings = true, -- Ensures 'showtabline' is set to 2 (always show)
-})
+	require('mini.pairs').setup({
+		-- Standard pairs: (), [], {}, "", '', ``
+		mappings = {
+			['('] = { action = 'open', pair = '()', neigh_pattern = '[^\\].' },
+			['['] = { action = 'open', pair = '[]', neigh_pattern = '[^\\].' },
+			['{'] = { action = 'open', pair = '{}', neigh_pattern = '[^\\].' },
 
-require('mini.pairs').setup({
-	-- Standard pairs: (), [], {}, "", '', ``
-	mappings = {
-		['('] = { action = 'open', pair = '()', neigh_pattern = '[^\\].' },
-		['['] = { action = 'open', pair = '[]', neigh_pattern = '[^\\].' },
-		['{'] = { action = 'open', pair = '{}', neigh_pattern = '[^\\].' },
+			[')'] = { action = 'close', pair = '()', neigh_pattern = '[^\\].' },
+			[']'] = { action = 'close', pair = '[]', neigh_pattern = '[^\\].' },
+			['}'] = { action = 'close', pair = '{}', neigh_pattern = '[^\\].' },
 
-		[')'] = { action = 'close', pair = '()', neigh_pattern = '[^\\].' },
-		[']'] = { action = 'close', pair = '[]', neigh_pattern = '[^\\].' },
-		['}'] = { action = 'close', pair = '{}', neigh_pattern = '[^\\].' },
+			['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '[^\\].', register = { cr = false } },
+			["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '[^\\].', register = { cr = false } },
+			['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '[^\\].', register = { cr = false } },
+		},
+	})
+end)
 
-		['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '[^\\].', register = { cr = false } },
-		["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '[^\\].', register = { cr = false } },
-		['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '[^\\].', register = { cr = false } },
-	},
-})
 --fzf
 
 local actions = require('fzf-lua.actions')
@@ -63,6 +68,7 @@ fzf_lua.setup({
 		},
 		fzf = {
 			["ctrl-a"] = "toggle-all",
+
 			["ctrl-t"] = "first",
 			["ctrl-g"] = "last",
 			["ctrl-d"] = "half-page-down",
@@ -85,27 +91,27 @@ vim.keymap.set("n", "<leader>ff", function()
 	fzf_lua.files()
 end, { desc = "FZF Files" })
 vim.keymap.set("n", "<leader>fg", function()
-		fzf_lua.live_grep()
+	fzf_lua.live_grep()
 end, { desc = "FZF Live Grep" })
 vim.keymap.set("n", "<leader>fb", function()
-		fzf_lua.buffers()
+	fzf_lua.buffers()
 end, { desc = "FZF Buffers" })
 vim.keymap.set("n", "<leader>fh", function()
-		fzf_lua.help_tags()
+	fzf_lua.help_tags()
 end, { desc = "FZF Help Tags" })
 vim.keymap.set("n", "<leader>fx", function()
-		fzf_lua.diagnostics_document()
+	fzf_lua.diagnostics_document()
 end, { desc = "FZF Diagnostics Document" })
 vim.keymap.set("n", "<leader>fX", function()
-		fzf_lua.diagnostic_workspace()
+	fzf_lua.diagnostic_workspace()
 end, { desc = "FZF Diagnostics Workspace" })
-vim.keymap.set('n', '<leader>fro', function()
-		fzf_lua.oldfiles()
+vim.keymap.set('n', '<leader>frf', function()
+	fzf_lua.oldfiles()
 end, { desc = 'Recent Files' })
 
 -- nvim tree
 
-vim.g.loaded_netrw = 0
+vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 require("nvim-tree").setup({
 	view = {
@@ -121,50 +127,59 @@ require("nvim-tree").setup({
 })
 vim.keymap.set("n", "<leader>n", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle tree" })
 -- blink cmp
-require('blink.cmp').setup({
-	fuzzy = { implementation = 'prefer_rust_with_warning' },
-	signature = { enabled = true },
-	keymap = {
-		preset = "none",
-		['<C-k>'] = { 'show', 'show_documentation', 'hide_documentation' },
-		['<C-s>'] = { 'show', 'show_signature', 'show_signature' },
-		['<C-space>'] = { "hide", "show" },
+vim.api.nvim_create_autocmd("InsertEnter", {
+	callback = function()
+		require('blink.cmp').setup({
+			fuzzy = { implementation = 'prefer_rust_with_warning' },
+			signature = { enabled = true },
+			keymap = {
+				preset = "none",
+				['<C-k>'] = { 'show', 'show_documentation', 'hide_documentation' },
+				['<C-s>'] = { 'show', 'show_signature', 'show_signature' },
+				['<C-space>'] = { "show", "hide" },
+				["<C-n>"] = { "select_next", "fallback" },
+				["<C-p>"] = { "select_prev", "fallback" },
 
-		["<C-n>"] = { "select_next", "fallback" },
-		["<C-p>"] = { "select_prev", "fallback" },
+				-- This allows them to navigate the menu AND move through snippets.
+				["<Tab>"] = { "select_and_accept", "snippet_forward", "fallback" },
+				["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
 
-		-- This allows them to navigate the menu AND move through snippets.
-		["<Tab>"] = { "select_and_accept", "snippet_forward", "fallback" },
-		["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
-	},
+			},
 
-	appearance = {
-		use_nvim_cmp_as_default = true,
-		nerd_font_variant = "mono",
-	},
+			appearance = {
+				use_nvim_cmp_as_default = true,
+				nerd_font_variant = "mono",
+			},
 
 
-	completion = {
-		menu = {
-			auto_show = true,
-		},
-		documentation = {
-			auto_show = true,
-			auto_show_delay_ms = 200,
+			completion = {
+				menu = {
+					auto_show = true,
+				},
+				documentation = {
+					auto_show = true,
+					auto_show_delay_ms = 200,
+				}
+			},
+
+			cmdline = {
+				keymap = {
+					preset = 'inherit',
+					['<CR>'] = { 'accept_and_enter', 'fallback' },
+					['<Tab>'] = { 'show', 'select_next', 'fallback' },
+					['<S-Tab>'] = { 'select_prev', 'fallback' },
+				},
+			},
+			sources = { default = { "lsp", 'path', 'snippets', 'buffer' } }
+		})
+
+		vim.lsp.config["*"] = {
+			capabilities = require("blink.cmp").get_lsp_capabilities(),
 		}
-	},
+	end,
+	once = true
 
-	cmdline = {
-		keymap = {
-			preset = 'inherit',
-			['<CR>'] = { 'accept_and_enter', 'fallback' },
-			['<Tab>'] = { 'show', 'select_next', 'fallback' },
-			['<S-Tab>'] = { 'select_prev', 'fallback' },
-		},
-	},
-	sources = { default = { "lsp", 'path', 'snippets', 'buffer' } }
 })
-
 
 -- which key
 vim.defer_fn(function()
@@ -173,7 +188,4 @@ vim.defer_fn(function()
 	wk.add({ { "<leader>b", group = "󰓩 Buffers" } })
 	--lsp mason
 	require("mason").setup({})
-
-
-	
 end, 80)

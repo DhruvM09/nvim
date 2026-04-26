@@ -1,4 +1,3 @@
--- ~/.config/nvim-new/lua/lsp.lua
 local augroup = vim.api.nvim_create_augroup("UserLspConfig", { clear = true })
 vim.lsp.enable({
 	"lua_ls",
@@ -57,6 +56,7 @@ do
 		return orig(contents, syntax, opts, ...)
 	end
 end
+
 
 local function lsp_on_attach(ev)
 	local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -135,3 +135,4 @@ vim.keymap.set("n", "<leader>q", function()
 	vim.diagnostic.setloclist({ open = true })
 end, { desc = "Open diagnostic list" })
 vim.keymap.set("n", "<leader>dl", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
+

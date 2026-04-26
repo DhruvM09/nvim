@@ -2,6 +2,8 @@ if vim.loader then
   vim.loader.enable()
 end
 vim.opt.termguicolors = true
+-- Set to true if you have a Nerd Font installed and selected in the terminal
+vim.g.have_nerd_font = true
 vim.cmd.colorscheme("retrobox")
 local function set_transparent() -- set UI component to transparent
 	local groups = {
@@ -17,6 +19,7 @@ local function set_transparent() -- set UI component to transparent
 		--"TabLineFill",
 		"ColorColumn",
 	}
+
 	for _, g in ipairs(groups) do
 		vim.api.nvim_set_hl(0, g, { bg = "none" })
 	end
@@ -24,17 +27,18 @@ local function set_transparent() -- set UI component to transparent
 end
 
 set_transparent()
+vim.api.nvim_set_hl(0, "Delimiter", { fg = "#fe8019" }) -- make brackets orange
 vim.env.LANG = "en_US.UTF-8"
 -- keymaps and leader
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 require("keymaps")
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
+
 -- options
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorline = true
+
 -- 2. Restrict cursorline to only the line number (prevents row highlighting)
 vim.opt.cursorlineopt = 'number'
 
@@ -100,11 +104,6 @@ vim.opt.wildmenu = true
 require("autocmds")
 require("statusline")
 require("plugins")
-
-vim.lsp.config["*"] = {
-		capabilities = require("blink.cmp").get_lsp_capabilities(),
-	}
 require("lsp")
 
 
---transparent
